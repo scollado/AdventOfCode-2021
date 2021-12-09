@@ -24,7 +24,7 @@ class LanterFishGeneration(Sized):
     def pass_days(self, day_count: int):
         for day in range(day_count):
             self._decay()
-            print(f'After day {str(day)}: {self._current_generation}')
+            print(f'After day {str(day+1)}: {self._current_generation}')
 
     def __repr__(self) -> str:
         return str({age: count for age, count in enumerate(self._current_generation)})
