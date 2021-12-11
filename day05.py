@@ -9,13 +9,11 @@ from aocutils.aoc import Exercise
 from aocutils.file import get_input_data_filepath
 
 
-@dataclass
+@dataclass(repr=False)
 class Point:
-
-    def __init__(self, x: int, y: int) -> None:
-        self.x = x
-        self.y = y
-        self.value = 0
+    x: int
+    y: int
+    value: int = 0
 
     def on_same_column_than(self, other_point: 'Point'):
         return self.x == other_point.x
@@ -165,7 +163,7 @@ class Day05(Exercise):
     def part_two(self) -> int:
         part_two_map = VentMap(self.segment_list)
         print(part_two_map.draw())
-        
+
         return part_two_map.high_points()
 
 
