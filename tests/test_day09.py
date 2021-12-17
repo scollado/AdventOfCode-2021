@@ -31,19 +31,19 @@ class TestDay09(TestCase):
 class TestHeightMap(TestCase):
     def test_getitem(self):
         sut = HeightMap(EXAMPLE_INPUT.split("\n"))
-        expected_first_point = MapPoint(parent_map=sut,
+        expected_first_point = MapPoint(sut,
                                         x=0, y=0,
-                                        depth=2)
-        expected_second_row_first_point = MapPoint(parent_map=sut,
+                                        value=2)
+        expected_second_row_first_point = MapPoint(sut,
                                                    x=0, y=1,
-                                                   depth=3)
-        expected_last_point = MapPoint(parent_map=sut,
-                                       x=sut.width - 1, y=sut.height - 1,
-                                       depth=8)
+                                                   value=3)
+        expected_last_point = MapPoint(sut,
+                                       x=sut.max_x - 1, y=sut.max_y - 1,
+                                       value=8)
 
         self.assertEqual(expected_first_point, sut[(0, 0)])
         self.assertEqual(expected_second_row_first_point, sut[(0, 1)])
-        self.assertEqual(expected_last_point, sut[(sut.width - 1, sut.height - 1)])
+        self.assertEqual(expected_last_point, sut[(sut.max_x - 1, sut.max_y - 1)])
 
 
 class TestMapPoint(TestCase):
@@ -53,48 +53,48 @@ class TestMapPoint(TestCase):
         self.heightmap = HeightMap(EXAMPLE_INPUT.split("\n"))
 
     def test_top_neighbor(self):
-        first_point_on_second_row: MapPoint = self.heightmap.points[10]
+        first_point_on_second_row: MapPoint = self.heightmap.values[10]
 
-        first_point_on_first_row: MapPoint = self.heightmap.points[0]
+        first_point_on_first_row: MapPoint = self.heightmap.values[0]
 
-        self.assertEqual(first_point_on_first_row, first_point_on_second_row.top_neighbor())
+        self.assertEqual(first_point_on_first_row, first_point_on_second_row.top())
 
     def test_top_neighbor_is_None(self):
-        first_point_on_first_row: MapPoint = self.heightmap.points[0]
+        first_point_on_first_row: MapPoint = self.heightmap.values[0]
 
-        self.assertIsNone(first_point_on_first_row.top_neighbor())
+        self.assertIsNone(first_point_on_first_row.top())
 
     def test_right_neighbor(self):
-        first_point: MapPoint = self.heightmap.points[0]
+        first_point: MapPoint = self.heightmap.values[0]
 
-        expected_neighbor: MapPoint = self.heightmap.points[1]
+        expected_neighbor: MapPoint = self.heightmap.values[1]
 
-        self.assertEqual(expected_neighbor, first_point.right_neighbor())
+        self.assertEqual(expected_neighbor, first_point.right())
 
     def test_right_neighbor_is_None(self):
-        last_point = self.heightmap.points[-1]
+        last_point = self.heightmap.values[-1]
 
-        self.assertIsNone(last_point.right_neighbor())
+        self.assertIsNone(last_point.right())
 
     def test_down_neighbor(self):
-        first_point_on_first_row: MapPoint = self.heightmap.points[0]
+        first_point_on_first_row: MapPoint = self.heightmap.values[0]
 
-        first_point_on_second_row: MapPoint = self.heightmap.points[10]
+        first_point_on_second_row: MapPoint = self.heightmap.values[10]
 
-        self.assertEqual(first_point_on_second_row, first_point_on_first_row.down_neighbor())
+        self.assertEqual(first_point_on_second_row, first_point_on_first_row.bottom())
 
     def test_down_neighbor_is_None(self):
-        last_point = self.heightmap.points[-1]
+        last_point = self.heightmap.values[-1]
 
-        self.assertIsNone(last_point.down_neighbor())
+        self.assertIsNone(last_point.bottom())
 
     def test_left_neighbor(self):
-        second_point_on_first_row: MapPoint = self.heightmap.points[1]
+        second_point_on_first_row: MapPoint = self.heightmap.values[1]
 
-        first_point_on_first_row: MapPoint = self.heightmap.points[0]
+        first_point_on_first_row: MapPoint = self.heightmap.values[0]
 
-        self.assertEqual(first_point_on_first_row, second_point_on_first_row.left_neighbor())
+        self.assertEqual(first_point_on_first_row, second_point_on_first_row.left())
 
     def test_left_neighbor_is_None(self):
-        first_point = self.heightmap.points[0]
-        self.assertIsNone(first_point.left_neighbor())
+        first_point = self.heightmap.values[0]
+        self.assertIsNone(first_point.left())

@@ -1,61 +1,35 @@
 from __future__ import annotations
 
 import math
-import uuid
 from collections.abc import Sized
-from dataclasses import dataclass
-from typing import Optional
+from typing import Any
 
-from aocutils.aoc import Exercise
+from aocutils.aoc import Exercise, MatrixCell, Matrix
 from aocutils.file import get_input_data_filepath
 
 
-@dataclass
-class MapPoint:
-    parent_map: HeightMap
-    x: int
-    y: int
-    depth: int
+class MapPoint(MatrixCell):
 
-    def __post_init__(self):
+    def __init__(self, matrix: Matrix, x: int, y: int, value: Any) -> None:
+        super().__init__(matrix, x, y, value)
+
         self.basin_id = None
 
-        if self.depth >= 9:
+        if self.value >= 9:
             self.basin_id = -1
 
     def __hash__(self) -> int:
-        return hash(f'({str(self.x)}, {str(self.y)})={str(self.depth)}')
+        return hash(f'({str(self.x)}, {str(self.y)})={str(self.value)}')
+
+    def __eq__(self, other: MapPoint):
+        return self.x == other.x and self.y == other.y and self.value == other.value and self.basin_id == other.basin_id
 
     def is_lowest(self) -> bool:
-        return self.depth < min([point.depth for point in self.neighbors()])
-
-    def top_neighbor(self) -> Optional[MapPoint]:
-        if self.y <= 0:
-            return None
-
-        return self.parent_map[(self.x, self.y - 1)]
-
-    def right_neighbor(self) -> Optional[MapPoint]:
-        if self.x >= self.parent_map.width - 1:
-            return None
-
-        return self.parent_map[(self.x + 1, self.y)]
-
-    def down_neighbor(self) -> Optional[MapPoint]:
-        if self.y >= self.parent_map.height - 1:
-            return None
-
-        return self.parent_map[(self.x, self.y + 1)]
-
-    def left_neighbor(self) -> Optional[MapPoint]:
-        if self.x <= 0:
-            return None
-
-        return self.parent_map[(self.x - 1, self.y)]
+        return self.value < min([point.value for point in self.neighbors()])
 
     def neighbors(self) -> list[MapPoint]:
         return [point
-                for point in (self.top_neighbor(), self.right_neighbor(), self.down_neighbor(), self.left_neighbor())
+                for point in (self.top(), self.right(), self.bottom(), self.left())
                 if point is not None]
 
 
@@ -78,25 +52,13 @@ class Basin(Sized):
             self.propagate(neighbor)
 
 
-class HeightMap:
+class HeightMap(Matrix):
 
-    def __getitem__(self, coordinates: tuple[int, int]) -> MapPoint:
-        col, row = coordinates
-        if col >= self.width or row >= self.height:
-            raise KeyError
-
-        point_index = (self.width - 1) * row + col + row
-        return self.points[point_index]
-
-    def __init__(self, rows: list[str]) -> None:
-        self.height = len(rows)
-        self.width = len(rows[0].strip())
-        self.points = [MapPoint(self, x, y, int(depth))
-                       for y, row in enumerate(rows)
-                       for x, depth in enumerate(row.strip())]
+    def _init_value(self, x, y, value) -> MatrixCell:
+        return MapPoint(self, x, y, int(value))
 
     def low_points(self) -> list[MapPoint]:
-        return [point for point in self.points if point.is_lowest()]
+        return [point for point in self.values if point.is_lowest()]
 
     def basins(self) -> list[Basin]:
         return [Basin(basin_id, point) for basin_id, point in enumerate(self.low_points())]
@@ -106,7 +68,7 @@ class Day09(Exercise):
 
     def part_one(self) -> int:
         height_map = HeightMap(list(self.input_data))
-        return sum([1 + point.depth for point in height_map.low_points()])
+        return sum([1 + point.value for point in height_map.low_points()])
 
     def part_two(self) -> int:
         height_map = HeightMap(list(self.input_data))

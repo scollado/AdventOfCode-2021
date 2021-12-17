@@ -4,7 +4,7 @@ from aocutils.aoc import Exercise
 from aocutils.file import get_input_data_filepath
 
 
-class LanterFishGeneration(Sized):
+class LanternFishGeneration(Sized):
 
     def __len__(self) -> int:
         return sum(self._current_generation)
@@ -33,12 +33,12 @@ class LanterFishGeneration(Sized):
 class Day06(Exercise):
 
     def part_one(self) -> int:
-        generation = LanterFishGeneration(list(self.input_data)[0])
+        generation = LanternFishGeneration(list(self.input_data)[0])
         generation.pass_days(80)
         return len(generation)
 
     def part_two(self) -> int:
-        generation = LanterFishGeneration(list(self.input_data)[0])
+        generation = LanternFishGeneration(list(self.input_data)[0])
         generation.pass_days(256)
         return len(generation)
 

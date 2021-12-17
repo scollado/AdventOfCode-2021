@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from day06 import LanterFishGeneration
+from day06 import LanternFishGeneration
 
 EXAMPLE_INPUT = '3,4,3,1,2'
 EXPECTED_DAY_18_COUNT = 26
@@ -8,11 +8,11 @@ EXPECTED_DAY_80_COUNT = 5934
 EXPECTED_DAY_256_COUNT = 26984457539
 
 
-class TestLanterFishGeneration(TestCase):
+class TestLanternFishGeneration(TestCase):
 
     def setUp(self) -> None:
         super().setUp()
-        self._generation = LanterFishGeneration(EXAMPLE_INPUT)
+        self._generation = LanternFishGeneration(EXAMPLE_INPUT)
 
     def test_pass_18_days(self):
         self._generation.pass_days(18)

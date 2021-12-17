@@ -45,7 +45,6 @@ class TestDay10(TestCase):
         lines = [str(line) for line in lines]
         self.assertListEqual(sorted(EXPECTED_INCOMPLETE_LINES), sorted(lines))
 
-
     def test_completion_scoring(self):
         self.assertEqual(288957, self.sut.complete_score('}}]])})]'))
         self.assertEqual(5566, self.sut.complete_score(')}>]})'))
