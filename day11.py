@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from aocutils.aoc import Exercise, Matrix, MatrixCell
+from aocutils.aoc import Exercise, Matrix
 from aocutils.file import get_input_data_filepath
 
 
-class FlashingOctopus(MatrixCell):
+class FlashingOctopus(Matrix.Cell):
 
     def __init__(self, octopus_map: OctopusesMap, x: int, y: int, energy_level: int = 0) -> None:
         super().__init__(octopus_map, x, y, energy_level)
@@ -28,7 +28,7 @@ class FlashingOctopus(MatrixCell):
 
 class OctopusesMap(Matrix):
 
-    def _init_value(self, x, y, value) -> MatrixCell:
+    def _init_value(self, x, y, value) -> Matrix.Cell:
         return FlashingOctopus(self, x, y, int(value))
 
     def tick(self) -> int:

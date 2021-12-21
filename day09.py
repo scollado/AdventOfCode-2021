@@ -4,11 +4,11 @@ import math
 from collections.abc import Sized
 from typing import Any
 
-from aocutils.aoc import Exercise, MatrixCell, Matrix
+from aocutils.aoc import Exercise, Matrix
 from aocutils.file import get_input_data_filepath
 
 
-class MapPoint(MatrixCell):
+class MapPoint(Matrix.Cell):
 
     def __init__(self, matrix: Matrix, x: int, y: int, value: Any) -> None:
         super().__init__(matrix, x, y, value)
@@ -54,7 +54,7 @@ class Basin(Sized):
 
 class HeightMap(Matrix):
 
-    def _init_value(self, x, y, value) -> MatrixCell:
+    def _init_value(self, x, y, value) -> Matrix.Cell:
         return MapPoint(self, x, y, int(value))
 
     def low_points(self) -> list[MapPoint]:

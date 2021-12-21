@@ -78,34 +78,40 @@ class CaveMapVisitor:
 
 class Day12(Exercise):
 
-    @classmethod
-    def part_one_visit_condition(cls, cave: Cave, visited_caves: list[Cave]) -> bool:
+    @staticmethod
+    def part_one_visit_condition(cave: Cave, visited_caves: list[Cave]) -> bool:
         return cave not in visited_caves or cave.is_big()
 
-    @classmethod
-    def part_two_visit_condition(cls, cave: Cave, visited_caves: list[Cave]) -> bool:
+    @staticmethod
+    def part_two_visit_condition(cave: Cave, visited_caves: list[Cave]) -> bool:
         small_cave_counter = Counter([cave for cave in visited_caves if not cave.is_big()])
         return cave not in visited_caves or cave.is_big() or (cave.node_name != Cave.CAVE_START and
                                                               2 not in small_cave_counter.values())
 
-    def __init__(self, input_data: Iterable | Sized) -> None:
-        super().__init__(input_data)
-        self.nodes = dict()
+    @staticmethod
+    def build_nodes(input_data) -> CaveMap:
+        caves = dict()
         for line in input_data:
             start, end = line.strip().split('-')
-            if start in self.nodes:
-                start_node = self.nodes[start]
+            if start in caves:
+                start_node = caves[start]
             else:
                 start_node = Cave(start)
-                self.nodes[start] = start_node
+                caves[start] = start_node
 
-            if end in self.nodes:
-                end_node = self.nodes[end]
+            if end in caves:
+                end_node = caves[end]
             else:
                 end_node = Cave(end)
-                self.nodes[end] = end_node
+                caves[end] = end_node
 
             start_node.add_neighbor(end_node)
+
+        return caves
+
+    def __init__(self, input_data: Iterable | Sized) -> None:
+        super().__init__(input_data)
+        self.nodes = self.build_nodes(input_data)
 
     def part_one(self) -> int:
         cave_map = self.nodes

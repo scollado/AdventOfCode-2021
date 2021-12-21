@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from day12 import CaveMap, Day12
+from day12 import Day12
 
 SIMPLE_EXAMPLE_INPUT = '''
 start-A
@@ -52,17 +52,14 @@ EXPECTED_PATH_LIST = sorted([
 ])
 
 
-class TestCaveMap(TestCase):
-    def test_find_paths_simple_example(self):
-        sut = CaveMap(SIMPLE_EXAMPLE_INPUT.split("\n"))
-        self.assertListEqual(EXPECTED_PATH_LIST, sut.find_paths())
-
-
 class TestDay12(TestCase):
 
     def setUp(self) -> None:
-
         self.sut = Day12(SIMPLE_EXAMPLE_INPUT.split("\n"))
+
+    def test_complex_example(self):
+        complex_sut = Day12(COMPLEX_EXAMPLE_INPUT.split("\n"))
+        self.assertEqual(COMPLEX_EXAMPLE_PATH_COUNT, complex_sut.part_one())
 
     def test_part_one(self):
         self.assertEqual(SIMPLE_EXAMPLE_EXPECTED_COUNT, self.sut.part_one())
