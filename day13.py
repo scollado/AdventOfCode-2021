@@ -4,7 +4,8 @@ import re
 from collections.abc import Sized
 from typing import Any
 
-from aocutils.aoc import Exercise, Matrix
+from aocutils.aoc import Exercise
+from aocutils.matrix import Matrix
 from aocutils.file import get_input_data_filepath
 
 
@@ -47,13 +48,13 @@ class TransparentSheet(Matrix, Sized):
     def __add__(self, other: TransparentSheet) -> TransparentSheet:
         new_matrix = TransparentSheet.create_from(self)
 
-        for index, dot in enumerate(self.values):
-            new_matrix.values[index] = dot + other.values[index]
+        for index, dot in enumerate(self.cells):
+            new_matrix.cells[index] = dot + other.cells[index]
 
         return new_matrix
 
     def __len__(self) -> int:
-        return sum([1 for dot in self.values if dot.value])
+        return sum([1 for dot in self.cells if dot.value])
 
     def _init_value(self, x, y, value: str) -> Matrix.Cell:
         return TransparentSheet.Dot(self, x, y, value)

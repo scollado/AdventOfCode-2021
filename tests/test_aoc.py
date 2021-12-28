@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from aocutils.aoc import Matrix
+from aocutils.matrix import Matrix
 
 INPUT_MATRIX = '''
 00011

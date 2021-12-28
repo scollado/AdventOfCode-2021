@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from aocutils.aoc import Exercise, Matrix
+from aocutils.aoc import Exercise
+from aocutils.matrix import Matrix
 from aocutils.file import get_input_data_filepath
 
 
@@ -34,18 +35,18 @@ class OctopusesMap(Matrix):
     def tick(self) -> int:
 
         # Increase energy level
-        for octopus in self.values:
+        for octopus in self.cells:
             octopus.value += 1
 
         # Make octopuses flash and propagate energy until no flash happens
         turn_flashes = None
         tick_flashes = 0
         while turn_flashes is None or 0 < turn_flashes:
-            turn_flashes = len([octopus.flashed for octopus in self.values if octopus.flash()])
+            turn_flashes = len([octopus.flashed for octopus in self.cells if octopus.flash()])
             tick_flashes += turn_flashes
 
         # Reset flashed octopuses
-        for octopus in [flashed for flashed in self.values if flashed.flashed]:
+        for octopus in [flashed for flashed in self.cells if flashed.flashed]:
             octopus.reset()
 
         return tick_flashes
@@ -64,7 +65,7 @@ class Day11(Exercise):
     def part_two(self) -> int:
         octopus_map = OctopusesMap(list(self.input_data))
 
-        target_value = '0' * len(octopus_map.values)
+        target_value = '0' * len(octopus_map.cells)
         tick_count = 0
 
         while str(octopus_map).replace("\n", "") != target_value:
