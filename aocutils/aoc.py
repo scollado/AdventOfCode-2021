@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import logging
+import sys
 from abc import ABC, abstractmethod
 from typing import Iterable, Sized
 
@@ -8,6 +10,11 @@ class Exercise(ABC):
     def __init__(self, input_data: Iterable | Sized | list[str]) -> None:
         super().__init__()
         self.input_data = input_data
+        logging.basicConfig(
+            stream=sys.stdout,
+            level=logging.INFO
+        )
+        self.log = logging.getLogger(self.__class__.__name__)
 
     @abstractmethod
     def part_one(self) -> int:
